@@ -1,33 +1,28 @@
 # PathLab
 
-> A live maze-exploration arena where search algorithms and custom bots race to the goal.
+Browser-based maze-racing arena where classical search algorithms and JavaScript bots compete head-to-head on a shared, step-by-step scoreboard. Built with Vite, React, TypeScript, and Tailwind. No backend.
 
-<p align="center">
-  <strong>BFS · DFS · A* · Greedy Best-First · Wall Follower · Panic Bot · Beeline Bot · Left Turner · Drifter · …and your custom bot.</strong>
-</p>
-
-PathLab is an algorithm-battle simulator, not a generic pathfinding visualizer. Pick a maze, pick competitors, pick whether they get to see the whole maze or only fog-of-war, and watch them race step-by-step on the same scoreboard.
+Pick a maze, pick competitors, choose omniscient or fog-of-war visibility, and watch them race. Write your own bot in a sandboxed editor and pit it against the league.
 
 ## Overview
 
-- **Frontend-only.** Vite + React + TypeScript + Tailwind CSS. No backend required.
+- **Frontend-only.** Vite + React + TypeScript + Tailwind CSS. Runs entirely in the browser.
 - **Two vision modes.** *Omniscient*: bots see the full maze. *Explorer*: fog of war; bots only know what they've stepped near.
 - **Step-by-step movement.** Every competitor takes one move per tick on a shared timeline. Live scoreboard updates as the race unfolds.
 - **A real custom-bot editor.** Write a JavaScript `chooseMove(context)` function, save it to local storage, and pit it against the rest of the league.
 
 ## Features
 
-- Landing page · Main arena · Bot guide · Custom-bot editor
-- 6 prebuilt mazes ranging from beginner to a procedurally-generated boss
-- 13 prebuilt competitors split into three real categories: 4 whole-maze planners, 2 local-rule strategies, and 7 intentionally flawed bots
-- A click-to-paint **maze editor** that saves a custom maze to local storage and exposes it in the arena
+- Landing page, main arena, bot guide, custom-bot editor, custom-maze editor
+- 6 prebuilt mazes from a gentle warm-up to a procedurally-generated boss
+- 14 prebuilt competitors split into three categories: 4 whole-maze planners, 3 local-rule strategies, and 7 intentionally flawed bots
+- Click-to-paint maze editor that saves a custom maze to local storage and exposes it in the arena
 - Start, Pause, Resume, Step, Reset, Force-finish, and a 1–60 moves/sec speed slider
 - Collapsible setup panel so the arena can take the full width
 - Live maze visualization with per-bot trails, status badges, and finish glow
 - Scoreboard: status, steps, cells explored, dead-ends, backtracks, loops, runtime, final rank, efficiency
-- Final results panel with ranking, winner spotlight, and a "race again" CTA
+- Final results panel with ranking, winner spotlight, and a race-again CTA
 - Sandboxed custom-bot compiler with starter templates, error messages, and a 250 ms per-move guard
-- Custom-bot editor with a multi-page emoji picker and color palette
 
 ## Competitors
 
@@ -46,24 +41,25 @@ These take the entire maze on race start, run a graph search over it, and walk t
 
 ### Local-rule strategies
 
-These only look at the four cells immediately next to the bot. They behave identically in omniscient and fog modes because they never use the full-maze view either way. Solve any simply-connected maze; can loop on mazes with internal cycles.
+These only look at the four cells immediately next to the bot. They behave identically in omniscient and fog modes because they never use the full-maze view either way.
 
 | Bot | What it does |
 |---|---|
-| **Wall Follower 🧱** | Classic right-hand rule. |
-| **Left Turner ↩️** | Mirror image: left-hand rule. |
+| **Wall Follower** | Right-hand rule. Solves any simply-connected maze; can loop on mazes with internal cycles. |
+| **Left Turner** | Mirror image: left-hand rule. |
+| **Pledge** | Walks a preferred direction; when blocked, wall-follows with an angle counter and peels off when the counter returns to zero. Escapes loops that trap Wall Follower. |
 
 ### Intentionally flawed bots
 
 | Bot | Strategy |
 |---|---|
-| **Random Walker 🎲** | Uniformly random open direction. |
-| **Panic Bot 😱** | Picks the move that *increases* distance to the goal. |
-| **Beeline Bot 🐝** | Heads straight toward the goal and refuses to revisit cells; terminated by the first dead-end. |
-| **Wall Hugger 🫂** | Prefers cells adjacent to walls; slow through open rooms. |
-| **Stubborn Bot 🐂** | Commits to a direction until something blocks it. |
-| **Coward Bot 🐔** | Refuses to step into any cell that looks like a dead-end (one walkable neighbor). |
-| **Drifter 🌀** | Mostly random, biased toward continuing in the last direction. |
+| **Random Walker** | Uniformly random open direction. |
+| **Panic Bot** | Picks the move that *increases* distance to the goal. |
+| **Beeline Bot** | Heads straight toward the goal and refuses to revisit cells; terminated by the first dead-end. |
+| **Wall Hugger** | Prefers cells adjacent to walls; slow through open rooms. |
+| **Stubborn Bot** | Commits to a direction until something blocks it. |
+| **Coward Bot** | Refuses to step into any cell that looks like a dead-end (one walkable neighbor). |
+| **Drifter** | Mostly random, biased toward continuing in the last direction. |
 
 ## Custom bot
 
@@ -86,7 +82,7 @@ context.lastDirection  // 'up' | 'down' | 'left' | 'right' | null
 
 Return `'up' | 'down' | 'left' | 'right'` (or `null` to give up). The compiler:
 
-- Runs your code via a sandboxed `new Function`. Code is **browser-only**, nothing is uploaded.
+- Runs your code via a sandboxed `new Function`. Code is browser-only, nothing is uploaded.
 - Validates the return value and disqualifies the bot on invalid output or runtime errors.
 - Aborts any `chooseMove` call that exceeds 250 ms to keep the UI responsive.
 - Lets you pick a name, color, and emoji, and saves it to `localStorage`.
@@ -136,7 +132,7 @@ src/
 ├── mazes.ts                 ASCII templates + procedural boss + solvability assertions
 ├── bots/
 │   ├── helpers.ts           BFS/DFS/A* helpers, neighbor utilities
-│   ├── strong.ts            Planners (BFS, DFS, A*, Greedy) + Wall Follower
+│   ├── strong.ts            Planners (BFS, DFS, A*, Greedy) + Wall Follower + Pledge
 │   ├── flawed.ts            Left Turner (local) + 7 intentionally flawed bots
 │   ├── custom.ts            sandboxed compiler for user bots
 │   └── index.ts             registry
@@ -149,20 +145,6 @@ src/
 ```
 
 Adding a new bot is a single file: implement `BotDefinition` and add it to the registry in `src/bots/index.ts`. Adding a maze is one ASCII template in `src/mazes.ts`.
-
-## Future improvements
-
-- Weighted terrain (grass / mud / stone) + Dijkstra-style bots
-- A Q-Learning bot trained in-browser across multiple races
-- Tournament mode: round-robin across all mazes, aggregate leaderboard
-- Saved bots (name + revisions)
-- Replay scrubber with timeline of every move
-- User-created mazes via a paint tool
-- Multiplayer / shareable race links
-
-## Resume bullet
-
-> Built **PathLab**, a browser-based maze-racing arena (React + Vite + TypeScript + Tailwind) where classic search algorithms (BFS, DFS, A*, Greedy Best-First, Wall Follower) compete head-to-head against intentionally flawed agents, with a sandboxed JavaScript editor for user-authored bots, two visibility modes (omniscient and fog-of-war), and a real-time scoreboard ranking competitors on efficiency, exploration cost, and penalties.
 
 ## License
 

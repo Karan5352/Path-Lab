@@ -1,5 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { Github } from "lucide-react";
 import clsx from "clsx";
+
+const REPO_URL = "https://github.com/Karan5352/Path-Lab";
 
 export function Layout() {
   return (
@@ -17,6 +20,16 @@ export function Layout() {
             <NavItem to="/editor">Bot editor</NavItem>
             <NavItem to="/maze-editor">Maze editor</NavItem>
             <NavItem to="/guide">Guide</NavItem>
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View source on GitHub"
+              title="View source on GitHub"
+              className="ml-1 p-1.5 rounded-lg text-ink-700 hover:bg-canvas-sunken transition-colors"
+            >
+              <Github size={18} />
+            </a>
           </nav>
         </div>
       </header>

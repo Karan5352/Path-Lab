@@ -4,6 +4,10 @@ Browser-based maze-racing arena where classical search algorithms and JavaScript
 
 Pick a maze, pick competitors, choose omniscient or fog-of-war visibility, and watch them race. Write your own bot in a sandboxed editor and pit it against the league.
 
+![PathLab demo](docs/demo.gif)
+
+Live at [pathlab.tandra.dev](https://pathlab.tandra.dev).
+
 ## Overview
 
 - **Frontend-only.** Vite + React + TypeScript + Tailwind CSS. Runs entirely in the browser.

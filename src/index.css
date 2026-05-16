@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(110, 69, 255, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 110% 20%, rgba(255, 120, 73, 0.10), transparent 55%),
+    #FAF8F3;
+  color: #0B0F1A;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(110, 69, 255, 0.22);
+  color: #0B0F1A;
+}
+
+@layer components {
+  .surface {
+    @apply bg-canvas-raised border border-ink-100 rounded-2xl shadow-soft;
+  }
+  .surface-muted {
+    @apply bg-canvas-sunken border border-ink-100 rounded-xl;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium text-sm transition-colors focus:outline-none focus:ring-4 focus:ring-brand-500/15 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-ink-900 text-white hover:bg-ink-700;
+  }
+  .btn-accent {
+    @apply btn bg-brand-500 text-white hover:bg-brand-600 shadow-pop;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-ink-700 hover:bg-canvas-sunken border border-ink-100;
+  }
+  .btn-danger {
+    @apply btn bg-white text-rose-600 border border-rose-200 hover:bg-rose-50;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-lg border border-ink-100 bg-white px-2.5 py-1 text-xs font-medium text-ink-700;
+  }
+  .kbd {
+    @apply inline-flex items-center justify-center min-w-[1.4rem] h-5 px-1.5 rounded-md border border-ink-100 bg-canvas-sunken text-[10px] font-mono text-ink-500;
+  }
+}
+
+/* Custom code editor scrollbars */
+textarea.code-editor {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  tab-size: 2;
+}
+
+/* Subtle dotted bg behind the maze */
+.arena-bg {
+  background-image:
+    radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+  background-size: 14px 14px;
+  background-position: 0 0;
+}
